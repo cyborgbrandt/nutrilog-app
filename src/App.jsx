@@ -525,28 +525,43 @@ function AiCamera({ onResult }) {
 
   async function analyzeImage(b64) {
     setLoading(true); setResult(null); setError("");
+    
+    const prompt = `You are a Singapore nutrition expert. Identify the food in this image and estimate macros per serving. Return ONLY a valid JSON object matching this schema, do not include markdown blocks: {"name":"Chicken Rice","emoji":"🍚","protein":28,"carbs":52,"fat":12}. Singapore hawker foods examples: chicken rice, laksa, char kway teow, nasi lemak, roti prata, bak kut teh, satay, hokkien mee, mee rebus, rojak, cai png, teh tarik, wonton noodles.`;
+    const payload = { 
+      contents: [{ 
+        parts: [
+          { text: prompt }, 
+          { inlineData: { mimeType: "image/jpeg", data: b64 } }
+        ] 
+      }] 
+    };
+
+    // Try the primary model first
     try {
-      const prompt = `You are a Singapore nutrition expert. Identify the food in this image and estimate macros per serving. Return ONLY a valid JSON object matching this schema, do not include markdown blocks: {"name":"Chicken Rice","emoji":"🍚","protein":28,"carbs":52,"fat":12}. Singapore hawker foods examples: chicken rice, laksa, char kway teow, nasi lemak, roti prata, bak kut teh, satay, hokkien mee, mee rebus, rojak, cai png, teh tarik, wonton noodles.`;
-      
-      // Explicitly hardcoded to stable 2.5 flash lite to avoid free tier locks
-      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`, {
+      let r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          contents: [{ 
-            parts: [
-              { text: prompt }, 
-              { inlineData: { mimeType: "image/jpeg", data: b64 } }
-            ] 
-          }] 
-        }),
+        body: JSON.stringify(payload),
       });
       
-      const d = await r.json();
+      let d = await r.json();
+
+      // If the primary model is overloaded (high demand) or errors out, trigger the bulletproof fallback route
+      if (d.error) {
+        console.warn("Primary model busy, switching to high-capacity backup...");
+        r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        d = await r.json();
+      }
+
       if (d.error) { setError(d.error.message); setLoading(false); return; }
       
       const text = d.candidates?.[0]?.content?.parts?.[0]?.text || "";
-      const clean = text.replace(/```json|```/g, "").trim();
+      const clean = text.replace(/```json|
+```/g, "").trim();
       const parsed = JSON.parse(clean);
       
       setResult({
@@ -557,67 +572,10 @@ function AiCamera({ onResult }) {
         fat: Number(parsed.fat) || 0
       });
     } catch (e) { 
-      setError("Failed to analyze image. Ensure your key is valid and try again."); 
+      setError("Failed to analyze image. Please try another photo."); 
     }
     setLoading(false);
   }
-
-  function handleFile(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const url = e.target.result;
-      setImage(url);
-      const b64 = url.split(",")[1];
-      analyzeImage(b64);
-    };
-    reader.readAsDataURL(file);
-  }
-
-  if (showKeyInput) return (
-    <div>
-      <div style={{ textAlign: "center", marginBottom: 16 }}>
-        <div style={{ fontSize: "2rem", marginBottom: 8 }}>🤖</div>
-        <p style={{ fontSize: "0.88rem", color: "var(--muted)", lineHeight: 1.5 }}>
-          Enter your Google Gemini API key to enable AI food recognition. Get a free key at <a href="https://aistudio.google.com" target="_blank" rel="noreferrer" style={{ color: "var(--accent3)", textDecoration: "none" }}>aistudio.google.com</a>
-        </p>
-      </div>
-      <input className="nl-input" placeholder="AIza…" value={apiKey} onChange={e => setApiKey(e.target.value)} style={{ marginBottom: 10 }} />
-      <button className="btn-primary" onClick={saveKey} disabled={!apiKey.trim()}>Save & Continue</button>
-    </div>
-  );
-
-  return (
-    <div>
-      {!image ? (
-        <>
-          <div className="ai-upload-area" onClick={() => fileRef.current.click()}>
-            <div className="ai-upload-icon">📸</div>
-            <p className="ai-upload-text">Tap to select photo or use camera</p>
-            <p style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: 6 }}>Supports direct camera capture & photo library uploads</p>
-          </div>
-          {/* Note: capture="environment" removed to unleash the native device option drawer */}
-          <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={e => e.target.files[0] && handleFile(e.target.files[0])} />
-        </>
-      ) : (
-        <img src={image} alt="food" style={{ width: "100%", borderRadius: "var(--radius-sm)", marginBottom: 12, maxHeight: 220, objectFit: "cover" }} />
-      )}
-      {loading && <div style={{ textAlign: "center", padding: "20px 0" }}><div className="spinner" style={{ width: 30, height: 30 }} /><p style={{ fontSize: "0.82rem", color: "var(--muted)", marginTop: 10 }}>Analysing with AI…</p></div>}
-      {error && <p style={{ color: "var(--accent2)", fontSize: "0.85rem", marginBottom: 12 }}>{error}</p>}
-      {result && (
-        <div className="ai-result fade-in">
-          <div className="ai-result-title">✨ AI Identified</div>
-          <p style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: 6 }}>{result.emoji} {result.name}</p>
-          <p style={{ fontSize: "0.8rem", color: "var(--muted)", marginBottom: 12 }}>
-            P: {result.protein}g · C: {result.carbs}g · F: {result.fat}g · {Math.round((result.protein * 4) + (result.carbs * 4) + (result.fat * 9))} kcal
-          </p>
-          <button className="btn-primary" onClick={() => onResult(result)}>Add to Log</button>
-          <button className="btn-ghost" style={{ marginTop: 8 }} onClick={() => { setImage(null); setResult(null); if(fileRef.current) fileRef.current.value = ""; }}>Try Another Photo</button>
-        </div>
-      )}
-      <button style={{ background: "none", border: "none", color: "var(--muted)", fontSize: "0.75rem", cursor: "pointer", marginTop: 8, display: "block", width: "100%", textAlign: "center" }} onClick={() => { ls.del("nutrilog_gemini_key"); setShowKeyInput(true); }}>Change API key</button>
-    </div>
-  );
-}
 
 // ─── MANUAL ENTRY ─────────────────────────────────────────────────────────────
 function ManualEntry({ onAdd }) {
