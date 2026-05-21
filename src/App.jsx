@@ -528,7 +528,7 @@ function AiCamera({ onResult }) {
     try {
       const prompt = `You are a Singapore nutrition expert. Identify the food in this image and estimate macros per serving. Return ONLY a valid JSON object matching this schema, do not include markdown blocks: {"name":"Chicken Rice","emoji":"🍚","protein":28,"carbs":52,"fat":12}. Singapore hawker foods examples: chicken rice, laksa, char kway teow, nasi lemak, roti prata, bak kut teh, satay, hokkien mee, mee rebus, rojak, cai png, teh tarik, wonton noodles.`;
       
-      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
