@@ -165,11 +165,9 @@ const STYLES = `
 
   /* ── CARDS ── */
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 12px; }
-  .card-dark { background: #0b1d14; border-color: #1d3a28; }
 
   /* ── CALORIE CARD ── */
   .cal-card { background: linear-gradient(135deg, #0d2216 0%, #0a1a0f 100%); border: 1px solid #1e3d28; border-radius: var(--radius); padding: 20px; margin-bottom: 12px; position: relative; overflow: hidden; }
-  .cal-card::before { content: ''; position: absolute; top: -40px; right: -40px; width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, rgba(79,255,176,0.12) 0%, transparent 70%); }
   .cal-label { color: var(--accent); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
   .cal-big { font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
   .cal-unit { font-size: 0.9rem; color: var(--muted); margin-left: 4px; }
@@ -179,12 +177,10 @@ const STYLES = `
   .cal-stat-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
   .cal-divider { width: 1px; background: var(--border); }
   .cal-ring-wrap { display: flex; align-items: center; gap: 16px; }
-  .cal-ring { flex-shrink: 0; }
 
   /* ── MACRO BARS ── */
   .macro-bar-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 12px; }
   .macro-row { display: flex; flex-direction: column; gap: 12px; }
-  .macro-item {}
   .macro-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
   .macro-name { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
   .macro-val { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; }
@@ -246,7 +242,7 @@ const STYLES = `
   .quick-btns { display: flex; gap: 4px; margin-top: 4px; }
   .quick-btn { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 5px; padding: 4px 2px; font-size: 0.68rem; color: var(--muted); cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
   .quick-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .quick-btn:disabled { opacity: 0.3; }
+  .quick-btn:disabled { opacity: 3; }
   .cal-preview { background: #0d2216; border: 1px solid #1d3a28; border-radius: var(--radius-sm); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
   .cal-preview-label { font-size: 0.8rem; color: var(--muted); }
   .cal-preview-val { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--accent); }
@@ -274,7 +270,6 @@ const STYLES = `
   /* ── SVG CHART ── */
   .chart-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; overflow: hidden; }
   .chart-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 12px; }
-  svg text { font-family: 'DM Sans', sans-serif; }
 
   /* ── PROFILE TAB ── */
   .profile-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
@@ -285,7 +280,6 @@ const STYLES = `
 
   /* ── TRAINER DASHBOARD ── */
   .trainer-page { flex: 1; overflow-y: auto; padding: 0 0 32px; }
-  .trainer-page::-webkit-scrollbar { display: none; }
   .trainer-header { padding: 48px 20px 16px; background: linear-gradient(180deg, #0d1a12 0%, var(--bg) 100%); }
   .trainer-title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; }
   .trainer-sub { color: var(--muted); font-size: 0.82rem; margin-top: 4px; }
@@ -300,17 +294,11 @@ const STYLES = `
   .client-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent) 0%, #0d6640 100%); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem; color: #0d0f14; flex-shrink: 0; }
   .client-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; }
   .client-detail { font-size: 0.75rem; color: var(--muted); margin-top: 1px; }
-  .badge { display: inline-block; background: #0d2216; border: 1px solid #1d3a28; color: var(--accent); font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.06em; }
-  .status-pill { font-size: 0.68rem; font-weight: 700; padding: 4px 10px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .status-green { background: #0d2216; color: var(--accent); border: 1px solid #1d3a28; }
-  .status-red { background: #2a1212; color: var(--accent2); border: 1px solid #4a1a1a; }
-  .status-yellow { background: #2a2012; color: var(--accent4); border: 1px solid #4a3a1a; }
   .compliance-row { display: flex; flex-direction: column; gap: 7px; }
   .compliance-item-label { font-size: 0.72rem; color: var(--muted); margin-bottom: 3px; display: flex; justify-content: space-between; }
 
   /* ── CLIENT DETAIL VIEW ── */
   .client-detail-page { flex: 1; overflow-y: auto; padding: 0 0 32px; }
-  .client-detail-page::-webkit-scrollbar { display: none; }
   .detail-header { padding: 48px 20px 16px; display: flex; align-items: center; gap: 14px; background: linear-gradient(180deg, #0d1a12 0%, var(--bg) 100%); }
   .back-btn { background: var(--surface2); border: none; color: var(--text); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .detail-section { padding: 0 20px; margin-bottom: 14px; }
@@ -348,8 +336,6 @@ const STYLES = `
   .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
   .empty-icon { font-size: 2.5rem; margin-bottom: 10px; }
   .empty-text { font-size: 0.88rem; }
-  .chip { display: inline-block; background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; padding: 4px 12px; font-size: 0.75rem; color: var(--muted); }
-  .note-sm { font-size: 0.72rem; color: var(--muted); text-align: center; padding: 8px 0; }
   .section-title { font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; margin-top: 4px; }
 
   @media (min-width: 430px) {
@@ -511,7 +497,7 @@ function BarcodeScanner({ onResult, onClose }) {
   );
 }
 
-// ─── AI CAMERA WITH ALBUM + CAM SELECTION ────────────────────────────────────
+// ─── AI CAMERA COMPONENT (STABLE RE-ENGINEERED BUILD) ────────────────────────
 function AiCamera({ onResult }) {
   const [apiKey, setApiKey] = useState(() => ls.get("nutrilog_gemini_key", ""));
   const [showKeyInput, setShowKeyInput] = useState(!ls.get("nutrilog_gemini_key", ""));
@@ -536,32 +522,19 @@ function AiCamera({ onResult }) {
       }] 
     };
 
-    // Try the primary model first
+    // Explicitly targets the globally available, unthrottled 3.1 Flash-Lite production engine
     try {
-      let r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`, {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
       
-      let d = await r.json();
-
-      // If the primary model is overloaded (high demand) or errors out, trigger the bulletproof fallback route
-      if (d.error) {
-        console.warn("Primary model busy, switching to high-capacity backup...");
-        r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        d = await r.json();
-      }
-
+      const d = await r.json();
       if (d.error) { setError(d.error.message); setLoading(false); return; }
       
       const text = d.candidates?.[0]?.content?.parts?.[0]?.text || "";
-      const clean = text.replace(/```json|
-```/g, "").trim();
+      const clean = text.replace(/```json|```/g, "").trim();
       const parsed = JSON.parse(clean);
       
       setResult({
@@ -572,10 +545,66 @@ function AiCamera({ onResult }) {
         fat: Number(parsed.fat) || 0
       });
     } catch (e) { 
-      setError("Failed to analyze image. Please try another photo."); 
+      setError("Failed to analyze image. Please try another photo selection."); 
     }
     setLoading(false);
   }
+
+  function handleFile(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const url = e.target.result;
+      setImage(url);
+      const b64 = url.split(",")[1];
+      analyzeImage(b64);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  if (showKeyInput) return (
+    <div>
+      <div style={{ textAlign: "center", marginBottom: 16 }}>
+        <div style={{ fontSize: "2rem", marginBottom: 8 }}>🤖</div>
+        <p style={{ fontSize: "0.88rem", color: "var(--muted)", lineHeight: 1.5 }}>
+          Enter your Google Gemini API key to enable AI food recognition. Get a free key at <a href="https://aistudio.google.com" target="_blank" rel="noreferrer" style={{ color: "var(--accent3)", textDecoration: "none" }}>aistudio.google.com</a>
+        </p>
+      </div>
+      <input className="nl-input" placeholder="AIza…" value={apiKey} onChange={e => setApiKey(e.target.value)} style={{ marginBottom: 10 }} />
+      <button className="btn-primary" onClick={saveKey} disabled={!apiKey.trim()}>Save & Continue</button>
+    </div>
+  );
+
+  return (
+    <div>
+      {!image ? (
+        <>
+          <div className="ai-upload-area" onClick={() => fileRef.current.click()}>
+            <div className="ai-upload-icon">📸</div>
+            <p className="ai-upload-text">Tap to take photo or choose from album</p>
+            <p style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: 6 }}>Powered by stable Gemini 3.1 Flash-Lite</p>
+          </div>
+          <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={e => e.target.files[0] && handleFile(e.target.files[0])} />
+        </>
+      ) : (
+        <img src={image} alt="food" style={{ width: "100%", borderRadius: "var(--radius-sm)", marginBottom: 12, maxHeight: 220, objectFit: "cover" }} />
+      )}
+      {loading && <div style={{ textAlign: "center", padding: "20px 0" }}><div className="spinner" style={{ width: 30, height: 30 }} /><p style={{ fontSize: "0.82rem", color: "var(--muted)", marginTop: 10 }}>Analysing meal contents…</p></div>}
+      {error && <p style={{ color: "var(--accent2)", fontSize: "0.85rem", marginBottom: 12 }}>{error}</p>}
+      {result && (
+        <div className="ai-result fade-in">
+          <div className="ai-result-title">✨ AI Identified</div>
+          <p style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: 6 }}>{result.emoji} {result.name}</p>
+          <p style={{ fontSize: "0.8rem", color: "var(--muted)", marginBottom: 12 }}>
+            P: {result.protein}g · C: {result.carbs}g · F: {result.fat}g · {Math.round((result.protein * 4) + (result.carbs * 4) + (result.fat * 9))} kcal
+          </p>
+          <button className="btn-primary" onClick={() => onResult(result)}>Add to Log</button>
+          <button className="btn-ghost" style={{ marginTop: 8 }} onClick={() => { setImage(null); setResult(null); if(fileRef.current) fileRef.current.value = ""; }}>Try Another Photo</button>
+        </div>
+      )}
+      <button style={{ background: "none", border: "none", color: "var(--muted)", fontSize: "0.75rem", cursor: "pointer", marginTop: 8, display: "block", width: "100%", textAlign: "center" }} onClick={() => { ls.del("nutrilog_gemini_key"); setShowKeyInput(true); }}>Change API key</button>
+    </div>
+  );
+}
 
 // ─── MANUAL ENTRY ─────────────────────────────────────────────────────────────
 function ManualEntry({ onAdd }) {
@@ -993,7 +1022,7 @@ function ClientDetailView({ name, onBack }) {
       <div className="detail-section">
         <div className="section-label">Today's Progress</div>
         <div className="cal-card" style={{ marginBottom: 10 }}>
-          <div style={{ display: "flex", justifycontent: "space-between", alignItems: "flex-end" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
             <div>
               <div className="cal-label">Calories</div>
               <div><span className="cal-big">{Math.round(macros.calories)}</span><span className="cal-unit"> / {goal} kcal</span></div>
