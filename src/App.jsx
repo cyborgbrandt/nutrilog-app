@@ -511,7 +511,7 @@ function BarcodeScanner({ onResult, onClose }) {
   );
 }
 
-// ─── AI CAMERA ────────────────────────────────────────────────────────────────
+// ─── AI CAMERA WITH ALBUM + CAM SELECTION ────────────────────────────────────
 function AiCamera({ onResult }) {
   const [apiKey, setApiKey] = useState(() => ls.get("nutrilog_gemini_key", ""));
   const [showKeyInput, setShowKeyInput] = useState(!ls.get("nutrilog_gemini_key", ""));
@@ -528,6 +528,7 @@ function AiCamera({ onResult }) {
     try {
       const prompt = `You are a Singapore nutrition expert. Identify the food in this image and estimate macros per serving. Return ONLY a valid JSON object matching this schema, do not include markdown blocks: {"name":"Chicken Rice","emoji":"🍚","protein":28,"carbs":52,"fat":12}. Singapore hawker foods examples: chicken rice, laksa, char kway teow, nasi lemak, roti prata, bak kut teh, satay, hokkien mee, mee rebus, rojak, cai png, teh tarik, wonton noodles.`;
       
+      // Explicitly hardcoded to stable 2.5 flash lite to avoid free tier locks
       const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -591,10 +592,11 @@ function AiCamera({ onResult }) {
         <>
           <div className="ai-upload-area" onClick={() => fileRef.current.click()}>
             <div className="ai-upload-icon">📸</div>
-            <p className="ai-upload-text">Tap to take photo or upload image</p>
-            <p style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: 6 }}>Powered by Gemini 1.5 Flash · Singapore-aware</p>
+            <p className="ai-upload-text">Tap to select photo or use camera</p>
+            <p style={{ fontSize: "0.72rem", color: "var(--muted)", marginTop: 6 }}>Supports direct camera capture & photo library uploads</p>
           </div>
-          <input ref={fileRef} type="file" accept="image/*" capture="environment" style={{ display: "none" }} onChange={e => e.target.files[0] && handleFile(e.target.files[0])} />
+          {/* Note: capture="environment" removed to unleash the native device option drawer */}
+          <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={e => e.target.files[0] && handleFile(e.target.files[0])} />
         </>
       ) : (
         <img src={image} alt="food" style={{ width: "100%", borderRadius: "var(--radius-sm)", marginBottom: 12, maxHeight: 220, objectFit: "cover" }} />
